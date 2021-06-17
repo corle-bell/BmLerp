@@ -13,4 +13,4 @@ UI中Graphics的Color
 
 通过BmLerpAnimation来播放动画
 
-##BmLerpAnimation示例： ![Alt text](https://github.com/corle-bell/BmLerp/blob/main/QQ%E6%88%AA%E5%9B%BE20210617223442.png)
+##BmLerpAnimation示例： ![Image text](https://github.com/corle-bell/BmLerp/blob/main/QQ%E6%88%AA%E5%9B%BE20210617223442.png)
