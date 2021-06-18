@@ -49,6 +49,10 @@ namespace Bm.Lerp
             for (int i = 0; i < stateMachine.states.Length; i++)
             {
                 stateNames[i] = stateMachine.states[i].state.name;
+                if(controller.state==stateNames[i])
+                {
+                    selectIndex = i;
+                }
             }
 
             m_PreviousTime = EditorApplication.timeSinceStartup;
