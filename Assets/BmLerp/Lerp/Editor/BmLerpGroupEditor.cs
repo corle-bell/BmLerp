@@ -184,7 +184,7 @@ namespace Bm.Lerp
                     var group = target as BmLerpGroup;
                     foreach(var script in arr)
                     {
-                        if (!group.groupNode.Contains(script))
+                        if (!group.groupNode.Contains(script) && group.GetInstanceID()!=script.GetInstanceID())
                         {
                             group.groupNode.Add(script);
                         }
