@@ -45,6 +45,7 @@ namespace Bm.Lerp
             loop = _loop;
             status = 1;
             isForward = true;
+            Lerp(0);
         }
 
         public void Stop()
