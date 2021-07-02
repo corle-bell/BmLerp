@@ -23,6 +23,7 @@ namespace Bm.Lerp
             {
                 previewP = EditorGUILayout.Slider(previewP, 0, 1);
                 data.Lerp(previewP);
+                EditorUtility.SetDirty(data);
             }
         }
     }
