@@ -9,7 +9,14 @@ namespace Bm.Lerp
         [HideInInspector]
         public List<BmLerpBase> groupNode = new List<BmLerpBase>();
 
+        [HideInInspector]
+        public float start_time=0;
 
+        [HideInInspector]
+        public float space_time=0.1f;
+
+        [HideInInspector]
+        public float node_len_time = 0.1f;
         public override void Init()
         {
             base.Init();
