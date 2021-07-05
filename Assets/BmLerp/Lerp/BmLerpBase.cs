@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,9 +29,6 @@ namespace Bm.Lerp
         [EnumName("打开曲线区间限制")]
         public bool isValueCurve;
 
-        [EnumName("事件是否只执行一次")]
-        public bool isEventOnce=true;
-
         public BmLerpEvent [] eventData;
 
         [HideInInspector]
@@ -55,7 +52,7 @@ namespace Bm.Lerp
         {
             for(int i=0; i< eventData.Length; i++)
             {
-                if(MathTools.Equals(_percent, eventData[i].progress) && (!isEventOnce || !isExec[i]))
+                if(_percent >= eventData[i].progress && !isExec[i])
                 {
                     isExec[i] = true;
                     eventData[i].mEvent.Invoke();
