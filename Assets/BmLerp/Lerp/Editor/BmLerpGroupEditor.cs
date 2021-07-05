@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Bm.Lerp
 {
-
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(BmLerpGroup), true)]
     public class BmLerpGroupEditor : Editor
     {
@@ -18,6 +18,8 @@ namespace Bm.Lerp
         private const int Dir_Left = 1;
         private const int Dir_Right = 2;
         private float percent;
+
+        private bool isOrder;
         public override void OnInspectorGUI()
         {
            
@@ -38,6 +40,10 @@ namespace Bm.Lerp
                 {
                     Preview();
                 }
+            }
+            if (GUILayout.Button("获取所有子集数据"))
+            {
+                AddFromChild();
             }
             EditorGUILayout.EndHorizontal();
 
@@ -80,7 +86,15 @@ namespace Bm.Lerp
                 t1.height = 20;
                 t1.width = (node.maxInGroup - node.minInGroup) * progressRect.width;
                 t1.x = progressRect.x+progressRect.width * node.minInGroup;
+
                 EditorGUI.ProgressBar(t1, node.percent, node.name);
+
+                Rect line = new Rect(t1);
+                line.width = progressRect.width;
+                line.x = progressRect.x;
+                line.height = 20;
+                GUI.backgroundColor = i%2==0?Color.white:Color.cyan;
+                GUI.Box(line, "");
 
                 //绘制节点进度条左值滑动帧
                 Rect t2 = new Rect(t1);
@@ -99,7 +113,7 @@ namespace Bm.Lerp
                 GUI.backgroundColor = Color.red;
                 GUI.contentColor = Color.white;
                 t1.width = buttonLen;
-                t1.x = progressRect.width + t1.width / 2;
+                t1.x = progressRect.width + t1.width / 2+5;
 
                 if(GUI.Button(t1, "Del"))
                 {
@@ -107,8 +121,52 @@ namespace Bm.Lerp
                 }
             }
 
-            
+            //指针            
+            progressRect.x += progressRect.width * group.percent;
+            progressRect.width = 1;
+            EditorGUI.DrawRect(progressRect, Color.white);
 
+            //快速排列工具
+            GUI.backgroundColor = Color.cyan;
+            
+            group.start_time = EditorGUILayout.Slider("起始位置", group.start_time, 0, 1);
+            group.space_time = EditorGUILayout.Slider("间隔参数", group.space_time, 0, 1);
+            group.node_len_time = EditorGUILayout.Slider("单个节点长度", group.node_len_time, 0, 1);
+            isOrder = EditorGUILayout.Toggle("快速排列", isOrder);
+
+            if(isOrder)
+            {
+                OrderNodes();
+            }
+        }
+
+        void AddFromChild()
+        {
+            var group = target as BmLerpGroup;
+            BmLerpBase[] data = group.gameObject.GetComponentsInChildren<BmLerpBase>();
+            foreach (var script in data)
+            {
+                if (!group.groupNode.Contains(script) && group.GetInstanceID() != script.GetInstanceID())
+                {
+                    group.groupNode.Add(script);
+                }
+            }
+        }
+
+        void OrderNodes()
+        {
+            var group = target as BmLerpGroup;
+            for (int i = 0; i < group.groupNode.Count; i++)
+            {
+                BmLerpBase aniNode = group.groupNode[i];
+                aniNode.minInGroup = group.start_time+ group.space_time * i;
+                aniNode.maxInGroup = aniNode.minInGroup + group.node_len_time;
+            }
+            Repaint();
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         #region Drag Frame
@@ -232,6 +290,7 @@ namespace Bm.Lerp
 
             m_PreviousTime = EditorApplication.timeSinceStartup;
             EditorApplication.update += inspectorUpdate;
+
         }
 
 

@@ -6,6 +6,7 @@ using UnityEditor.Animations;
 
 namespace Bm.Lerp
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(BmLerpBase), true)]
     public class BmLerpBaseEditor : Editor
     {
@@ -23,6 +24,7 @@ namespace Bm.Lerp
             {
                 previewP = EditorGUILayout.Slider(previewP, 0, 1);
                 data.Lerp(previewP);
+
                 EditorUtility.SetDirty(data);
             }
         }
