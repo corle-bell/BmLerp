@@ -81,6 +81,7 @@ namespace Bm.Lerp
                             status = loop==0?0:1;
                         }
                         isForward = !isForward;
+                        CleanExec();
                     }
                     break;
             }
