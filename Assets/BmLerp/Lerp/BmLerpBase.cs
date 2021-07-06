@@ -63,7 +63,7 @@ namespace Bm.Lerp
             }
         }
 
-        public void Lerp(float _percent, bool _isGroup=false)
+        public void Lerp(float _percent, bool _isGroup=false, bool _event=true)
         {
             if (_isGroup && lockByGroup) return;
             percent = _isGroup ? MathTools.Lerp(minInGroup, maxInGroup, 0, 1.0f, _percent) : _percent;            
@@ -74,7 +74,7 @@ namespace Bm.Lerp
             }
             _Lerp(_per);
             
-            if(Application.isPlaying)
+            if(Application.isPlaying && _event)
             {
                 ExecEvent(percent);
             }
