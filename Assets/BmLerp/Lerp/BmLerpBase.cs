@@ -66,14 +66,7 @@ namespace Bm.Lerp
         public void Lerp(float _percent, bool _isGroup=false)
         {
             if (_isGroup && lockByGroup) return;
-            if(_isGroup)
-            {
-                percent = MathTools.Lerp(minInGroup, maxInGroup, 0, 1.0f, _percent);
-            }
-            else
-            {
-                percent = _percent;
-            }
+            percent = _isGroup ? MathTools.Lerp(minInGroup, maxInGroup, 0, 1.0f, _percent) : _percent;            
             float _per = percent;
             if(isCurve)
             {
