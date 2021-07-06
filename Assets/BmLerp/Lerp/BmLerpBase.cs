@@ -48,14 +48,22 @@ namespace Bm.Lerp
         public virtual void Init()
         {
             if(eventData!=null) isExec = new bool[eventData.Length];
-            BmTools.ArrayClean(isExec);
+            CleanExec(true);
+        }
+
+        protected void CleanExec(bool _force=false)
+        {
+            if(!isOnceEvent || _force)
+            {
+                if (eventData != null) BmTools.ArrayClean(isExec);
+            }
         }
 
         protected void ExecEvent(float _percent)
         {
             for(int i=0; i< eventData.Length; i++)
             {
-                if(_percent >= eventData[i].progress && (isOnceEvent?!isExec[i]:true))
+                if(_percent >= eventData[i].progress && !isExec[i])                
                 {
                     isExec[i] = true;
                     eventData[i].mEvent.Invoke();
