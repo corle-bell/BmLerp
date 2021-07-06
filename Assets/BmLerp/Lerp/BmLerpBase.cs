@@ -29,6 +29,9 @@ namespace Bm.Lerp
         [EnumName("打开曲线区间限制")]
         public bool isValueCurve;
 
+        [EnumName("事件是否只执行一次")]
+        public bool isOnceEvent;
+
         public BmLerpEvent [] eventData;
 
         [HideInInspector]
@@ -52,7 +55,7 @@ namespace Bm.Lerp
         {
             for(int i=0; i< eventData.Length; i++)
             {
-                if(_percent >= eventData[i].progress && !isExec[i])
+                if(_percent >= eventData[i].progress && (isOnceEvent?!isExec[i]:true))
                 {
                     isExec[i] = true;
                     eventData[i].mEvent.Invoke();
