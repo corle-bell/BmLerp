@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,16 +49,18 @@ namespace Bm.Lerp
         }
 
 
+
         public void Stop()
         {
             status = 0;
         }
 
+
         private void InitLerp(float _per)
         {
             foreach (var item in groupNode)
             {
-                if(item.minInGroup>=_per)item.Lerp(_per, true);
+                item.Lerp(_per, true, false);
             }
         }
 
