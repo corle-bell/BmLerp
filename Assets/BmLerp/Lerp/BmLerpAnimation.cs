@@ -21,9 +21,16 @@ namespace Bm.Lerp
         [EnumName("乒乓")]
         public bool pingPang=false;
 
+        [EnumName("是否使用速度曲线")]
+        public bool isSpeedCurve = false;
+
+        [EnumName("速度曲线")]
+        public AnimationCurve speedCurve = AnimationCurve.Linear(0, 1, 1, 1);
+
         public int status = 0;
         protected float tick = 0;
         private bool isForward;
+        private float speed = 1.0f;
         public override void Init()
         {
             base.Init();
@@ -69,9 +76,10 @@ namespace Bm.Lerp
             switch (status)
             {
                 case 1:
-                    tick += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+                    
+                    tick += (ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime)*speed;
                     tick = tick > time ? time : tick;
-                    LerpPingPang(tick / time);
+                    LerpPingPang(tick / time);                    
                     if (tick>=time)
                     {
                         tick = 0;
@@ -85,6 +93,12 @@ namespace Bm.Lerp
                     }
                     break;
             }
+        }
+
+        protected override void _Lerp(float _per)
+        {
+            base._Lerp(_per);
+            speed = isSpeedCurve?speedCurve.Evaluate(_per):1.0f;
         }
 
         public void LerpPingPang(float _percent)
