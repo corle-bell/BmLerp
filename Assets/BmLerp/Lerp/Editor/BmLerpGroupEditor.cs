@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -87,7 +87,7 @@ namespace Bm.Lerp
                 t1.width = (node.maxInGroup - node.minInGroup) * progressRect.width;
                 t1.x = progressRect.x+progressRect.width * node.minInGroup;
 
-                EditorGUI.ProgressBar(t1, node.percent, node.name);
+                EditorGUI.ProgressBar(t1, node.percent, node.ToString());
 
                 Rect line = new Rect(t1);
                 line.width = progressRect.width;
