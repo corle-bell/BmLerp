@@ -7,7 +7,7 @@ namespace Bm.Lerp
     public class BmLerpGroup : BmLerpBase
     {
         [HideInInspector]
-        public List<BmLerpBase> groupNode = new List<BmLerpBase>();
+        public List<BmLerpGroupNode> groupNode = new List<BmLerpGroupNode>();
 
         [HideInInspector]
         public float start_time=0;
@@ -25,7 +25,7 @@ namespace Bm.Lerp
             percent = 0;
             foreach (var item in groupNode)
             {
-                item.Init();
+                item.lerp.Init();
             }
         }
         
@@ -34,7 +34,10 @@ namespace Bm.Lerp
         {
             foreach (var item in groupNode)
             {
-                item.Lerp(_per, true);
+                if (_per >= item.minInGroup)
+                {
+                    item.lerp.Lerp(item.curve.Evaluate(MathTools.Lerp(item.minInGroup, item.maxInGroup, 0, 1.0f, _per)), true);
+                }
             }
         }
 
@@ -42,7 +45,7 @@ namespace Bm.Lerp
         {
             for (int i=0; i<groupNode.Count; i++)
             {
-                if(groupNode[i]==null)
+                if(groupNode[i]==null || (groupNode[i] != null && groupNode[i].lerp == null))
                 {
                     groupNode.RemoveAt(i);
                 }

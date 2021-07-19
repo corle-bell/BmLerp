@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,7 +67,7 @@ namespace Bm.Lerp
         {
             foreach (var item in groupNode)
             {
-                item.Lerp(_per, true, false);
+                item.lerp.Lerp(_per, true, false);
             }
         }
 

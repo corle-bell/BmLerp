@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,10 +17,6 @@ namespace Bm.Lerp
         [EnumName("进度")]
         public float percent;
 
-        [EnumName("区间左值")]
-        public float minInGroup = 0;
-        [EnumName("区间右值")]
-        public float maxInGroup = 1.0f;
         [EnumName("曲线")]
         public AnimationCurve curve;
         [EnumName("是否使用曲线")]
@@ -63,7 +59,7 @@ namespace Bm.Lerp
         {
             for(int i=0; i< eventData.Length; i++)
             {
-                if(_percent >= eventData[i].progress && !isExec[i])                
+                if (_percent >= eventData[i].progress && !isExec[i])
                 {
                     isExec[i] = true;
                     eventData[i].mEvent.Invoke();
@@ -74,7 +70,7 @@ namespace Bm.Lerp
         public void Lerp(float _percent, bool _isGroup=false, bool _event=true)
         {
             if (_isGroup && lockByGroup) return;
-            percent = _isGroup ? MathTools.Lerp(minInGroup, maxInGroup, 0, 1.0f, _percent) : _percent;            
+            percent = _percent;            
             float _per = percent;
             if(isCurve)
             {
