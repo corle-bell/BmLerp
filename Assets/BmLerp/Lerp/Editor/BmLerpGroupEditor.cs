@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -68,7 +68,7 @@ namespace Bm.Lerp
 
 
             float buttonLen = 40;
-            progressRect.width -= buttonLen;
+            progressRect.width -= buttonLen*2;
 
             Rect groupRect = new Rect(progressRect);
             groupRect.height = 20;
@@ -79,6 +79,7 @@ namespace Bm.Lerp
             {
                 GUI.backgroundColor = Color.green;
                 var node = group.groupNode[i];
+                var nodeLerp = node.lerp;
 
                 //绘制节点进度条
                 Rect t1 = new Rect(progressRect);
@@ -87,7 +88,7 @@ namespace Bm.Lerp
                 t1.width = (node.maxInGroup - node.minInGroup) * progressRect.width;
                 t1.x = progressRect.x+progressRect.width * node.minInGroup;
 
-                EditorGUI.ProgressBar(t1, node.percent, node.ToString());
+                EditorGUI.ProgressBar(t1, nodeLerp.percent, node.lerp.ToString());
 
                 Rect line = new Rect(t1);
                 line.width = progressRect.width;
@@ -113,9 +114,16 @@ namespace Bm.Lerp
                 GUI.backgroundColor = Color.red;
                 GUI.contentColor = Color.white;
                 t1.width = buttonLen;
-                t1.x = progressRect.width + t1.width / 2+5;
+                t1.x = progressRect.width + t1.width / 2 + 5;
 
-                if(GUI.Button(t1, "Del"))
+                if (GUI.Button(t1, "Edit"))
+                {
+                    BmLerpGroupNodeWindow.Open(node);
+                }
+
+                t1.width = buttonLen;
+                t1.x = progressRect.width + t1.width / 2 + 5 + buttonLen;
+                if (GUI.Button(t1, "Del"))
                 {
                     group.groupNode.Remove(node);
                 }
@@ -146,11 +154,27 @@ namespace Bm.Lerp
             BmLerpBase[] data = group.gameObject.GetComponentsInChildren<BmLerpBase>();
             foreach (var script in data)
             {
-                if (!group.groupNode.Contains(script) && group.GetInstanceID() != script.GetInstanceID())
+                if (!isContain(script) && group.GetInstanceID() != script.GetInstanceID())
                 {
-                    group.groupNode.Add(script);
+                    var t = new BmLerpGroupNode();
+                    t.lerp = script;
+                    group.groupNode.Add(t);
                 }
             }
+            EditorUtility.SetDirty(group);
+        }
+
+        bool isContain(BmLerpBase _lerp)
+        {
+            var group = target as BmLerpGroup;
+            foreach(var item in group.groupNode)
+            {
+                if(item.lerp.GetInstanceID()== _lerp.GetInstanceID())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         void OrderNodes()
@@ -158,7 +182,7 @@ namespace Bm.Lerp
             var group = target as BmLerpGroup;
             for (int i = 0; i < group.groupNode.Count; i++)
             {
-                BmLerpBase aniNode = group.groupNode[i];
+                BmLerpGroupNode aniNode = group.groupNode[i];
                 aniNode.minInGroup = group.start_time+ group.space_time * i;
                 aniNode.maxInGroup = aniNode.minInGroup + group.node_len_time;
             }
@@ -173,7 +197,7 @@ namespace Bm.Lerp
         Vector2 touchBegin;
         float startX;
         int _selectDir = 0;
-        void MouseCheck(BmLerpBase node, Rect _rect, int _id, Rect _max, int _dir)
+        void MouseCheck(BmLerpGroupNode node, Rect _rect, int _id, Rect _max, int _dir)
         {
             Event aEvent;
             aEvent = Event.current;
@@ -242,9 +266,11 @@ namespace Bm.Lerp
                     var group = target as BmLerpGroup;
                     foreach(var script in arr)
                     {
-                        if (!group.groupNode.Contains(script) && group.GetInstanceID()!=script.GetInstanceID())
+                        if (!isContain(script) && group.GetInstanceID() != script.GetInstanceID())
                         {
-                            group.groupNode.Add(script);
+                            var tt = new BmLerpGroupNode();
+                            tt.lerp = script;
+                            group.groupNode.Add(tt);
                         }
                     }
                 }
@@ -269,7 +295,7 @@ namespace Bm.Lerp
             var group = target as BmLerpGroup;
             for (int i = 0; i < group.groupNode.Count; i++)
             {
-                BmLerpAnimator aniNode = group.groupNode[i] as BmLerpAnimator;
+                BmLerpAnimator aniNode = group.groupNode[i].lerp as BmLerpAnimator;
                 if(aniNode)
                 {
                     aniNode.BakeAnimation();
@@ -287,6 +313,7 @@ namespace Bm.Lerp
         {
             var group = target as BmLerpGroup;
             group.CheckNode();
+            EditorUtility.SetDirty(group);
 
             m_PreviousTime = EditorApplication.timeSinceStartup;
             EditorApplication.update += inspectorUpdate;
@@ -315,7 +342,7 @@ namespace Bm.Lerp
                 var group = target as BmLerpGroup;
                 for (int i = 0; i < group.groupNode.Count; i++)
                 {
-                    BmLerpAnimator aniNode = group.groupNode[i] as BmLerpAnimator;
+                    BmLerpAnimator aniNode = group.groupNode[i].lerp as BmLerpAnimator;
                     if (aniNode)
                     {
                         aniNode.animator.Update((float)delta);
