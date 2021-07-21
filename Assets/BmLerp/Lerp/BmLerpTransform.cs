@@ -20,9 +20,11 @@ namespace Bm.Lerp
         public BmLerpTransformType type;
 
         [HideInInspector]
-        public Vector3 [] beginData;
+        public Vector3 [] moveData;
         [HideInInspector]
-        public Vector3 [] endData;
+        public Vector3 [] scaleData;
+        [HideInInspector]
+        public Quaternion[] rotationData;
 
         protected override void _Lerp(float _per)
         {
@@ -41,29 +43,29 @@ namespace Bm.Lerp
             switch (this.type)
             {
                 case BmLerpTransformType.Position:
-                    transform.position = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
+                    transform.position = Vector3.LerpUnclamped(moveData[0], moveData[1], _per);
                     break;
                 case BmLerpTransformType.PositionLocal:
-                    transform.localPosition = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
+                    transform.localPosition = Vector3.LerpUnclamped(moveData[0], moveData[1], _per);
                     break;
                 case BmLerpTransformType.Rotation:
-                    transform.eulerAngles = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
+                    transform.rotation = Quaternion.LerpUnclamped(rotationData[0], rotationData[1], _per);
                     break;
                 case BmLerpTransformType.RotationLocal:
-                    transform.localEulerAngles = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
+                    transform.localRotation = Quaternion.LerpUnclamped(rotationData[0], rotationData[1], _per);
                     break;
                 case BmLerpTransformType.Scale:
-                    transform.localScale = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
+                    transform.localScale = Vector3.LerpUnclamped(scaleData[0], scaleData[1], _per);
                     break;
                 case BmLerpTransformType.TransAll:
-                    transform.position = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
-                    transform.eulerAngles = Vector3.LerpUnclamped(beginData[1], endData[1], _per);
-                    transform.localScale = Vector3.LerpUnclamped(beginData[2], endData[2], _per);
+                    transform.position = Vector3.LerpUnclamped(moveData[0], moveData[1], _per);
+                    transform.rotation = Quaternion.LerpUnclamped(rotationData[0], rotationData[1], _per);
+                    transform.localScale = Vector3.LerpUnclamped(scaleData[0], scaleData[1], _per);
                     break;
                 case BmLerpTransformType.TransAllLocal:
-                    transform.localPosition = Vector3.LerpUnclamped(beginData[0], endData[0], _per);
-                    transform.localEulerAngles = Vector3.LerpUnclamped(beginData[1], endData[1], _per);
-                    transform.localScale = Vector3.LerpUnclamped(beginData[2], endData[2], _per);
+                    transform.localPosition = Vector3.LerpUnclamped(moveData[0], moveData[1], _per);
+                    transform.localRotation = Quaternion.LerpUnclamped(rotationData[0], rotationData[1], _per);
+                    transform.localScale = Vector3.LerpUnclamped(scaleData[0], scaleData[1], _per);
                     break;
             }
         }
@@ -74,29 +76,29 @@ namespace Bm.Lerp
             switch (this.type)
             {
                 case BmLerpTransformType.Position:
-                    transform.position = Vector3.Lerp(beginData[0], endData[0], _per);
+                    transform.position = Vector3.Lerp(moveData[0], moveData[1], _per);
                     break;
                 case BmLerpTransformType.PositionLocal:
-                    transform.localPosition = Vector3.Lerp(beginData[0], endData[0], _per);
+                    transform.localPosition = Vector3.Lerp(moveData[0], moveData[1], _per);
                     break;
                 case BmLerpTransformType.Rotation:
-                    transform.eulerAngles = Vector3.Lerp(beginData[0], endData[0], _per);
+                    transform.rotation = Quaternion.Lerp(rotationData[0], rotationData[1], _per);
                     break;
                 case BmLerpTransformType.RotationLocal:
-                    transform.localEulerAngles = Vector3.Lerp(beginData[0], endData[0], _per);
+                    transform.localRotation = Quaternion.Lerp(rotationData[0], rotationData[1], _per);
                     break;
                 case BmLerpTransformType.Scale:
-                    transform.localScale = Vector3.Lerp(beginData[0], endData[0], _per);
+                    transform.localScale = Vector3.Lerp(scaleData[0], scaleData[1], _per);
                     break;
                 case BmLerpTransformType.TransAll:
-                    transform.position = Vector3.Lerp(beginData[0], endData[0], _per);
-                    transform.eulerAngles = Vector3.Lerp(beginData[1], endData[1], _per);
-                    transform.localScale = Vector3.Lerp(beginData[2], endData[2], _per);
+                    transform.position = Vector3.Lerp(moveData[0], moveData[1], _per);
+                    transform.rotation = Quaternion.Lerp(rotationData[0], rotationData[1], _per);
+                    transform.localScale = Vector3.Lerp(scaleData[0], scaleData[1], _per);
                     break;
                 case BmLerpTransformType.TransAllLocal:
-                    transform.localPosition = Vector3.Lerp(beginData[0], endData[0], _per);
-                    transform.localEulerAngles = Vector3.Lerp(beginData[1], endData[1], _per);
-                    transform.localScale = Vector3.Lerp(beginData[2], endData[2], _per);
+                    transform.localPosition = Vector3.Lerp(moveData[0], moveData[1], _per);
+                    transform.localRotation = Quaternion.Lerp(rotationData[0], rotationData[1], _per);
+                    transform.localScale = Vector3.Lerp(scaleData[0], scaleData[1], _per);
                     break;
             }
         }

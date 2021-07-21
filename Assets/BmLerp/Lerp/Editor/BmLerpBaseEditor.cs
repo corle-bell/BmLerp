@@ -10,10 +10,10 @@ namespace Bm.Lerp
     [CustomEditor(typeof(BmLerpBase), true)]
     public class BmLerpBaseEditor : Editor
     {
-       
-        bool isPreview;
+
+        protected bool isPreview;
         [Range(0, 1.0f)]
-        float previewP;
+        protected float percent;
         public override void OnInspectorGUI()
         {
             var data = target as BmLerpBase;
@@ -22,8 +22,8 @@ namespace Bm.Lerp
             isPreview = EditorGUILayout.Toggle("是否预览:", isPreview);
             if (isPreview)
             {
-                previewP = EditorGUILayout.Slider(previewP, 0, 1);
-                data.Lerp(previewP);
+                percent = EditorGUILayout.Slider(percent, 0, 1);
+                data.Lerp(percent);
 
                 EditorUtility.SetDirty(data);
             }

@@ -34,7 +34,7 @@ namespace Bm.Lerp
         {
             foreach (var item in groupNode)
             {
-                if (_per >= item.minInGroup)
+                //if (_per >= item.minInGroup)
                 {
                     item.lerp.Lerp(item.curve.Evaluate(MathTools.Lerp(item.minInGroup, item.maxInGroup, 0, 1.0f, _per)), true);
                 }

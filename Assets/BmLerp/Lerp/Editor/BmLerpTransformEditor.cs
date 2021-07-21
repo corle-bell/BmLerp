@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Bm.Lerp
 {
-
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(BmLerpTransform))]
     public class BmLerpTransformEditor : Editor
     {
@@ -32,6 +32,10 @@ namespace Bm.Lerp
             {
                 ConvertLocalData();
             }
+            if (GUILayout.Button("交换起始数据"))
+            {
+                SwapData(data);
+            }
             GUILayout.EndHorizontal();
 
             isPreview = EditorGUILayout.Toggle("是否预览:",isPreview);
@@ -49,60 +53,54 @@ namespace Bm.Lerp
 
         void RercordData(bool end, BmLerpTransform _data)
         {
-            Vector3[] data = !end ? _data.beginData : _data.endData;
-
             switch (_data.type)
             {
                 case BmLerpTransformType.Position:
-                    RecordOne(ref data, _data.transform.position);
+                    RecordOne(ref _data.moveData, _data.transform.position, end);
                     break;
                 case BmLerpTransformType.PositionLocal:
-                    Debug.Log(_data.transform.localPosition);
-                    RecordOne(ref data, _data.transform.localPosition);
+                    RecordOne(ref _data.moveData, _data.transform.localPosition, end);
                     break;
                 case BmLerpTransformType.Rotation:
-                    RecordOne(ref data, _data.transform.eulerAngles);
+                    RecordOne(ref _data.rotationData, _data.transform.rotation, end);
                     break;
                 case BmLerpTransformType.RotationLocal:
-                    RecordOne(ref data, _data.transform.localEulerAngles);
+                    RecordOne(ref _data.rotationData, _data.transform.localRotation, end);
                     break;
                 case BmLerpTransformType.Scale:
-                    RecordOne(ref data, _data.transform.localScale);
+                    RecordOne(ref _data.scaleData, _data.transform.localScale, end);
                     break;
                 case BmLerpTransformType.TransAll:
-                    RecordAll(ref data, _data.transform, false);
+                    RecordAll(_data, _data.transform, false, end);
                     break;
                 case BmLerpTransformType.TransAllLocal:
-                    RecordAll(ref data, _data.transform, false);
+                    RecordAll(_data, _data.transform, true, end);
                     break;
             }
-            if (end)
-            {
-                _data.endData = data;
-                return;
-            }
-            _data.beginData = data;
         }
 
-        void RecordAll(ref Vector3[] data, Transform _trans, bool isLocal)
+        void RecordAll(BmLerpTransform _data, Transform _trans, bool isLocal, bool _isEnd)
         {
-            if (data == null || data.Length < 3)
-            {
-                data = new Vector3[3];
-            }
-
-            data[0] = isLocal ? _trans.localPosition : _trans.position;
-            data[1] = isLocal ? _trans.localEulerAngles : _trans.eulerAngles;
-            data[2] = _trans.localScale;
+            RecordOne(ref _data.moveData, isLocal? _data.transform.localPosition:_data.transform.position, _isEnd);
+            RecordOne(ref _data.rotationData, isLocal ? _data.transform.localRotation :_data.transform.rotation, _isEnd);
+            RecordOne(ref _data.scaleData, _data.transform.localScale, _isEnd);
         }
 
-        void RecordOne(ref Vector3[] data, Vector3 _in)
+
+        void RecordOne<T>(ref T[] data, T _in, bool _isEnd)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length!=2)
             {
-                data = new Vector3[1];
+                data = new T[2];
             }
-            data[0] = _in;
+            data[_isEnd ? 1 : 0] = _in;
+        }
+
+        void SwapData(BmLerpTransform _data)
+        {
+            BmTools.Swap(ref _data.moveData[0], ref _data.moveData[1]);
+            BmTools.Swap(ref _data.scaleData[0], ref _data.scaleData[1]);
+            BmTools.Swap(ref _data.rotationData[0], ref _data.rotationData[1]);
         }
 
         void ConvertLocalData()
@@ -113,23 +111,22 @@ namespace Bm.Lerp
 
         void _ConvertLocalData(bool end, BmLerpTransform _data)
         {
-            Vector3[] data = !end ? _data.beginData : _data.endData;
             var parent = _data.transform.parent;
             if (parent == null)
             {
                 return;
             }
+            int id = end ? 1 : 0;
             switch (_data.type)
             {
                 case BmLerpTransformType.Position:
-                    data[0] = parent.InverseTransformPoint(data[0]);
+                    _data.moveData[id] = parent.InverseTransformPoint(_data.moveData[id]);
                     break;
                 case BmLerpTransformType.PositionLocal:
                     break;
                 case BmLerpTransformType.Rotation:
                     {
-                        Quaternion q = _data.transform.WorldToLocalRotationInParent(Quaternion.Euler(data[0]));
-                        data[0] = q.eulerAngles;
+                        _data.rotationData[id] = _data.transform.WorldToLocalRotationInParent(_data.rotationData[id]);
                     }
                     break;
                 case BmLerpTransformType.RotationLocal:
@@ -139,10 +136,8 @@ namespace Bm.Lerp
                     break;
                 case BmLerpTransformType.TransAll:
                     {
-                        data[0] = parent.InverseTransformPoint(data[0]);
-
-                        Quaternion q = _data.transform.WorldToLocalRotationInParent(Quaternion.Euler(data[1]));
-                        data[1] = q.eulerAngles;
+                        _data.moveData[id] = parent.InverseTransformPoint(_data.moveData[id]);
+                        _data.rotationData[id] = _data.transform.WorldToLocalRotationInParent(_data.rotationData[id]);
                     }
                     break;
                 case BmLerpTransformType.TransAllLocal:
