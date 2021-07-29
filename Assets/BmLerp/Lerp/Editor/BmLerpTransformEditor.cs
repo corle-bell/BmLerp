@@ -98,9 +98,9 @@ namespace Bm.Lerp
 
         void SwapData(BmLerpTransform _data)
         {
-            BmTools.Swap(ref _data.moveData[0], ref _data.moveData[1]);
-            BmTools.Swap(ref _data.scaleData[0], ref _data.scaleData[1]);
-            BmTools.Swap(ref _data.rotationData[0], ref _data.rotationData[1]);
+            if(_data.moveData!=null && _data.moveData.Length==2) BmTools.Swap(ref _data.moveData[0], ref _data.moveData[1]);
+            if (_data.scaleData != null && _data.scaleData.Length == 2) BmTools.Swap(ref _data.scaleData[0], ref _data.scaleData[1]);
+            if (_data.rotationData != null && _data.rotationData.Length == 2) BmTools.Swap(ref _data.rotationData[0], ref _data.rotationData[1]);
         }
 
         void ConvertLocalData()

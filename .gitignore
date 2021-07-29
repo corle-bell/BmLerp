@@ -2,3 +2,8 @@
 Temp
 Library
 Packages
+.vs
+obj
+.vsconfig
+*.csproj
+*.sln
