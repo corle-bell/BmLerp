@@ -4,16 +4,6 @@ using UnityEngine;
 
 namespace Bm.Lerp
 {
-    public enum BmLerpTransformType
-    {
-        Position,
-        PositionLocal,
-        Rotation,
-        RotationLocal,
-        Scale,
-        TransAll,
-        TransAllLocal,
-    }
 
     public class BmLerpTransform : BmLerpBase
     {

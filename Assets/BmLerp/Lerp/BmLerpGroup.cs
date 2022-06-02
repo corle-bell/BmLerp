@@ -51,6 +51,13 @@ namespace Bm.Lerp
                 }
             }
         }
+
+        public void AddNode(BmLerpBase script)
+        {
+            var t = new BmLerpGroupNode();
+            t.lerp = script;
+            groupNode.Add(t);
+        }
     }
 }
 

@@ -64,16 +64,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BmLerp\Ext\GizmosExtension.cs" />
     <Compile Include="Assets\BmLerp\Ext\TransformExtensionMethods.cs" />
     <Compile Include="Assets\BmLerp\Ext\VectorExtensionMethodes.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpAnimation.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpAnimationClip.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpAnimator.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpBase.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpBezier.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpCanvasGroup.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpGraphicsColor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpGroup.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpGroupNode.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpImageFill.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpLocalBezier.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpMaterial.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpRectTransform.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpSkinmeshRenderBlendShape.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\BmLerpSpline.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpSpriteColor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\BmLerpTransform.cs" />
     <Compile Include="Assets\BmLerp\Math\FloatLerpConvert.cs" />

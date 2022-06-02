@@ -66,8 +66,13 @@
   <ItemGroup>
     <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpAnimatorEditor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpBaseEditor.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpBezierEditor.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpBlendShapeNodeWindow.cs" />
     <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpGroupEditor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpGroupNodeWindow.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpRectTransformEditor.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpSkinmeshRenderBlendShapeEdtor.cs" />
+    <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpSplineEditor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\Editor\BmLerpTransformEditor.cs" />
     <Compile Include="Assets\BmLerp\Lerp\Editor\DragAreaGetObject.cs" />
     <Reference Include="UnityEngine">

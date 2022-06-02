@@ -11,7 +11,7 @@ public class MathTools
         _ret = Vector2.zero;
         bool top = TryGetIntersectPoint(new Vector3(_rect.xMin, _rect.yMin, 0), new Vector3(_rect.xMax, _rect.yMin, 0),
             _a, _b, out ret);
-        if(top)
+        if (top)
         {
             _ret = ret;
             return top;
@@ -174,6 +174,71 @@ public class MathTools
         Vector3 t1 = Vector3.Lerp(mid, end, _t);
         Vector3 p = Vector3.Lerp(t0, t1, _t);
         return p;
+
+        //return (1 - t) * ((1 - t) * p0 + t * p1) + t * ((1 - t) * p1 + t * p2);
+    }
+
+    public static Vector3 GetBezierPoint(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    {
+        Vector3 _bp0 = Vector3.Lerp(p0, p1, t);
+        Vector3 _bp1 = Vector3.Lerp(p1, p2, t);
+        Vector3 _bp2 = Vector3.Lerp(p2, p3, t);
+        return GetBezierPoint(_bp0, _bp1, _bp2, t);
+
+        //return (1 - t) * ((1 - t) * ((1 - t) * p0 + t * p1) + t * ((1 - t) * p1 + t * p2)) + t * ((1 - t) * ((1 - t) * p1 + t * p2) + t * ((1 - t) * p2 + t * p3));
+    }
+
+    public static Vector3 GetSplinePoint(Vector3[] pts, float t, Transform _parent = null)
+    {
+        int numSections = pts.Length - 3;
+        int currPt = Mathf.Min(Mathf.FloorToInt(t * (float)numSections), numSections - 1);
+        float u = t * (float)numSections - (float)currPt;
+
+        Vector3 p0 = pts[currPt];
+        Vector3 p1 = pts[currPt + 1];
+        Vector3 p2 = pts[currPt + 2];
+        Vector3 p3 = pts[currPt + 3];
+
+        if (_parent != null)
+        {
+            p0 = _parent.TransformPoint(pts[currPt]);
+            p1 = _parent.TransformPoint(pts[currPt + 1]);
+            p2 = _parent.TransformPoint(pts[currPt + 2]);
+            p3 = _parent.TransformPoint(pts[currPt + 3]);
+        }
+
+        return 0.5f * (
+            (-p0 + 3f * p1 - 3f * p2 + p3) * (u * u * u)
+            + (2f * p0 - 5f * p1 + 4f * p2 - p3) * (u * u)
+            + (-p0 + p2) * u
+            + 2f * p1
+            );
+    }
+    public static Vector3 GetSplinePoint(List<Vector3> pts, float t, Transform _parent = null)
+    {
+        int numSections = pts.Count - 3;
+        int currPt = Mathf.Min(Mathf.FloorToInt(t * (float)numSections), numSections - 1);
+        float u = t * (float)numSections - (float)currPt;
+
+        Vector3 p0 = pts[currPt];
+        Vector3 p1 = pts[currPt + 1];
+        Vector3 p2 = pts[currPt + 2];
+        Vector3 p3 = pts[currPt + 3];
+
+        if (_parent != null)
+        {
+            p0 = _parent.TransformPoint(pts[currPt]);
+            p1 = _parent.TransformPoint(pts[currPt + 1]);
+            p2 = _parent.TransformPoint(pts[currPt + 2]);
+            p3 = _parent.TransformPoint(pts[currPt + 3]);
+        }
+
+        return 0.5f * (
+            (-p0 + 3f * p1 - 3f * p2 + p3) * (u * u * u)
+            + (2f * p0 - 5f * p1 + 4f * p2 - p3) * (u * u)
+            + (-p0 + p2) * u
+            + 2f * p1
+            );
     }
 
     public static Vector3 Reverse(Vector3 _v)
@@ -186,8 +251,56 @@ public class MathTools
         return new Vector3(Mathf.Abs(_v.x), Mathf.Abs(_v.y), Mathf.Abs(_v.z));
     }
 
+    public static bool Between(float v, float _min, float _max)
+    {
+        return v >= _min && v <= _max;
+    }
+
+    public static bool Between(int v, int _min, int _max)
+    {
+        return v >= _min && v <= _max;
+    }
+
     public static bool Equals(float _a, float _b)
     {
         return Mathf.Abs(_a - _b) <= Mathf.Epsilon;
     }
+
+    public static float PerlinNoiseRandom(float _a, float _b, float _x, float _y)
+    {
+        float len = Mathf.Abs(_a - _b);
+        return Mathf.PerlinNoise(_x, _y) * len + Mathf.Min(_a, _b);
+    }
+
+    #region 生成高斯分布数
+    // mean：均值，variance：方差
+    // min和max用于去掉不需要的偏差值
+    public static float NextGaussian(float mean, float variance, float min, float max)
+    {
+        float x;
+        do
+        {
+            x = NextGaussian(mean, variance);
+        } while (x < min || x > max);
+        return x;
+    }
+
+    public static float NextGaussian(float mean, float standard_deviation)
+    {
+        return mean + NextGaussian() * standard_deviation;
+    }
+
+    public static float NextGaussian()
+    {
+        float v1, v2, s;
+        do
+        {
+            v1 = 2.0f * UnityEngine.Random.Range(0f, 1f) - 1.0f;
+            v2 = 2.0f * UnityEngine.Random.Range(0f, 1f) - 1.0f;
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1.0f || s == 0f);
+        s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
+        return v1 * s;
+    }
+    #endregion
 }

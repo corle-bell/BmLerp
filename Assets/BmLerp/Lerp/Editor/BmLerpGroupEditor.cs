@@ -138,8 +138,8 @@ namespace Bm.Lerp
             GUI.backgroundColor = Color.cyan;
             
             group.start_time = EditorGUILayout.Slider("起始位置", group.start_time, 0, 1);
-            group.space_time = EditorGUILayout.Slider("间隔参数", group.space_time, 0, 1);
-            group.node_len_time = EditorGUILayout.Slider("单个节点长度", group.node_len_time, 0, 1);
+            group.space_time = EditorGUILayout.Slider("间隔参数", group.space_time, -1, 1);
+            group.node_len_time = EditorGUILayout.Slider("单个节点长度", group.node_len_time, -1, 1);
             isOrder = EditorGUILayout.Toggle("快速排列", isOrder);
 
             if(isOrder)
@@ -183,7 +183,7 @@ namespace Bm.Lerp
             for (int i = 0; i < group.groupNode.Count; i++)
             {
                 BmLerpGroupNode aniNode = group.groupNode[i];
-                aniNode.minInGroup = group.start_time+ group.space_time * i;
+                aniNode.minInGroup = group.start_time + group.space_time * i;
                 aniNode.maxInGroup = aniNode.minInGroup + group.node_len_time;
             }
             Repaint();

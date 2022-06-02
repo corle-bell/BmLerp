@@ -19,6 +19,8 @@ namespace Bm.Lerp
         }
         private void OnGUI()
         {
+            EditorGUILayout.LabelField(node.lerp.ToString());
+
             EditorGUILayout.BeginHorizontal();
             node.minInGroup = EditorGUILayout.FloatField("区间左值", node.minInGroup);
             node.maxInGroup = EditorGUILayout.FloatField("区间右值", node.maxInGroup);
