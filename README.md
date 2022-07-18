@@ -13,6 +13,7 @@ UI中Graphics的Color
 
 通过BmLerpAnimation来播放动画
 
+增加了对TimeLine的支持
 
 # BmLerpTransform示例:
 ![Image text](https://github.com/corle-bell/BmLerp/blob/main/Screenshoot/transform.png)

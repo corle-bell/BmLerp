@@ -20,6 +20,23 @@ namespace Bm.Lerp
         private float percent;
 
         private bool isOrder;
+
+        private string[] blendShapeName;
+
+        private void InitBlendShapeInfo()
+        {
+            var group = target as BmLerpSkinmeshRenderBlendShape;
+            SkinnedMeshRenderer renderer = group.skinnedMesh;
+            int blendShapeCount = renderer.sharedMesh == null ? 0 : renderer.sharedMesh.blendShapeCount;
+            Mesh mesh = renderer.sharedMesh;
+            blendShapeName = new string[blendShapeCount];
+
+            for (int i = 0; i < blendShapeName.Length; i++)
+            {
+                blendShapeName[i] = mesh.GetBlendShapeName(i);
+            }
+        }
+
         public override void OnInspectorGUI()
         {
 
@@ -85,7 +102,7 @@ namespace Bm.Lerp
                 t1.width = (node.maxInGroup - node.minInGroup) * progressRect.width;
                 t1.x = progressRect.x + progressRect.width * node.minInGroup;
 
-                EditorGUI.ProgressBar(t1, pp, node.Name.ToString());
+                EditorGUI.ProgressBar(t1, pp, blendShapeName[node.Id]);
 
                 Rect line = new Rect(t1);
                 line.width = progressRect.width;
@@ -115,7 +132,7 @@ namespace Bm.Lerp
 
                 if (GUI.Button(t1, "Edit"))
                 {
-                    BmLerpBlendShapeNodeWindow.Open(node);
+                    BmLerpBlendShapeNodeWindow.Open(node, blendShapeName);
                 }
 
                 t1.width = buttonLen;
@@ -237,7 +254,7 @@ namespace Bm.Lerp
             if(GUILayout.Button("Ìí¼Ó"))
             {
                 var group = target as BmLerpSkinmeshRenderBlendShape;                                
-                BmLerpBlendShapeNodeWindow.Open(group.AddNode());
+                BmLerpBlendShapeNodeWindow.Open(group.AddNode(), blendShapeName);
             }
 
             GUILayout.Space(10);
@@ -258,11 +275,13 @@ namespace Bm.Lerp
             isPreview = false;
         }
 
+    
 
         private void OnEnable()
         {
             var group = target as BmLerpSkinmeshRenderBlendShape;
             group.CheckNode();
+            InitBlendShapeInfo();
             EditorUtility.SetDirty(group);
         }
 

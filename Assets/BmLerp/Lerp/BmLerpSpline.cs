@@ -34,7 +34,7 @@ namespace Bm.Lerp
                 var pos = MathTools.GetSplinePoint(points, (t - 1) / 100, transform);
                 var pos1 = MathTools.GetSplinePoint(points, t / 100, transform);
                 Gizmos.DrawLine(pos, pos1);
-            }
+            }            
         }
 #endif
     }
