@@ -164,7 +164,7 @@ namespace Bm.Lerp
             EditorUtility.SetDirty(group);
         }
 
-        bool isContain(BmLerpBase _lerp)
+        public bool isContain(BmLerpBase _lerp)
         {
             var group = target as BmLerpGroup;
             foreach(var item in group.groupNode)
@@ -264,14 +264,15 @@ namespace Bm.Lerp
                 if(arr != null)
                 {
                     var group = target as BmLerpGroup;
+                    if (arr.Length>1)
+                    {
+                        BmLerpComponentSelectWindow.Open(group, arr, this);
+                        return;
+                    }
+                   
                     foreach(var script in arr)
                     {
-                        if (!isContain(script) && group.GetInstanceID() != script.GetInstanceID())
-                        {
-                            var tt = new BmLerpGroupNode();
-                            tt.lerp = script;
-                            group.groupNode.Add(tt);
-                        }
+                        SafeAddNode(group, script);
                     }
                 }
                 else
@@ -286,7 +287,18 @@ namespace Bm.Lerp
                 EditorUtility.SetDirty(target);
             }
         }
+        
         #endregion;
+
+        public void SafeAddNode(BmLerpGroup group, BmLerpBase script)
+        {
+            if (!isContain(script) && group.GetInstanceID() != script.GetInstanceID())
+            {
+                var tt = new BmLerpGroupNode();
+                tt.lerp = script;
+                group.groupNode.Add(tt);
+            }
+        }
 
         void Preview()
         {
