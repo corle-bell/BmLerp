@@ -47,12 +47,9 @@ namespace Bm.Lerp
             }
             EditorGUILayout.EndHorizontal();
 
-
-
             if(isPreview)
             {
                 percent = EditorGUILayout.Slider(percent, 0, 1);
-
                 group.Lerp(percent);
             }
 
@@ -88,7 +85,11 @@ namespace Bm.Lerp
                 t1.width = (node.maxInGroup - node.minInGroup) * progressRect.width;
                 t1.x = progressRect.x+progressRect.width * node.minInGroup;
 
-                EditorGUI.ProgressBar(t1, nodeLerp.percent, node.lerp.ToString());
+                Rect progress = new Rect(t1);
+                progress.width -= 5;
+                progress.x += 5;
+
+                EditorGUI.ProgressBar(progress, nodeLerp.percent, node.lerp.ToString());
 
                 Rect line = new Rect(t1);
                 line.width = progressRect.width;
@@ -199,8 +200,10 @@ namespace Bm.Lerp
         int _selectDir = 0;
         void MouseCheck(BmLerpGroupNode node, Rect _rect, int _id, Rect _max, int _dir)
         {
+          
             Event aEvent;
             aEvent = Event.current;
+            
             switch (aEvent.type)
             {
                 case EventType.MouseDown:
@@ -300,7 +303,7 @@ namespace Bm.Lerp
             }
         }
 
-        void Preview()
+        protected void Preview()
         {
             isPreview = true;
 
@@ -315,7 +318,7 @@ namespace Bm.Lerp
             }
         }
 
-        void UnPreview()
+        protected void UnPreview()
         {
             isPreview = false;
         }
@@ -328,13 +331,13 @@ namespace Bm.Lerp
             EditorUtility.SetDirty(group);
 
             m_PreviousTime = EditorApplication.timeSinceStartup;
-            EditorApplication.update += inspectorUpdate;
+            EditorApplication.update += EditorUpdate;
 
         }
 
 
-        private double delta;
-        private double m_PreviousTime;
+        protected double delta;
+        protected double m_PreviousTime;
         private void OnDisable()
         {
 
@@ -342,7 +345,7 @@ namespace Bm.Lerp
 
         void OnDestroy()
         {
-            EditorApplication.update -= inspectorUpdate;
+            EditorApplication.update -= EditorUpdate;
         }
 
         private void inspectorUpdate()
@@ -362,6 +365,11 @@ namespace Bm.Lerp
                 }
                 
             }
+        }
+
+        protected virtual void EditorUpdate()
+        {
+            inspectorUpdate();
         }
     }
 }
