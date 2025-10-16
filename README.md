@@ -16,7 +16,7 @@ UI中Graphics的Color
 
 增加了对TimeLine的支持
 
-https://github.com/user-attachments/assets/06b365f7-20c5-4a48-8966-e3151d2bd66b
+https://github.com/user-attachments/assets/59de23f5-43bf-4b59-a790-74afc27fd490
 
 # BmLerpTransform示例:
 
